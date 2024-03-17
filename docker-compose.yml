@@ -1,0 +1,23 @@
+version: '3'
+services:
+  frontend:
+    build: "./frontend"
+    restart: always
+  cms:
+    image: wordpress:latest
+    volumes:
+      - "./cms/html:/var/www/html"
+    restart: always
+    ports:
+      - "11180:80"
+    env_file:
+      - "./cms/.env.local"
+  nginx:
+    image: nginx:1.25.4-alpine
+    restart: always
+    ports:
+      - "10443:10443"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - "./nginx/cert/server.crt:/etc/nginx/ssl/server.crt"
+      - "./nginx/cert/server.key:/etc/nginx/ssl/server.key"
